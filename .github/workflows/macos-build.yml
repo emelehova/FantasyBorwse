@@ -23,8 +23,8 @@ jobs:
       - name: Установка рабочей нагрузки .NET MAUI
         run: dotnet workload install maui
 
-      - name: Восстановление пакетов проекта
-        run: dotnet restore fh-browser.csproj
+      - name: Восстановление пакетов проекта (!!! ИСПРАВЛЕНИЕ ТУТ !!!)
+        run: dotnet restore fh-browser.csproj -f net9.0-maccatalyst
 
       - name: Публикация приложения macOS
         run: dotnet publish fh-browser.csproj -f net9.0-maccatalyst -c Release -p:CreatePackage=true
