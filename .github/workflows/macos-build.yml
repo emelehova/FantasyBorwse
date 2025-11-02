@@ -1,0 +1,36 @@
+name: Сборка .NET MAUI для macOS
+
+on:
+  push:
+    branches:
+      - "main"
+  workflow_dispatch:
+
+jobs:
+  build-macos:
+    name: Сборка установщика для macOS
+    runs-on: macos-latest
+
+    steps:
+      - name: Получение исходного кода
+        uses: actions/checkout@v4
+
+      - name: Установка .NET 9.0 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Установка рабочей нагрузки .NET MAUI
+        run: dotnet workload install maui
+
+      - name: Восстановление пакетов проекта
+        run: dotnet restore fh-browser.csproj
+
+      - name: Публикация приложения macOS
+        run: dotnet publish fh-browser.csproj -f net9.0-maccatalyst -c Release -p:CreatePackage=true
+
+      - name: Загрузка готового установщика
+        uses: actions/upload-artifact@v4
+        with:
+          name: FhBrowser-macOS-Installer
+          path: bin/Release/net9.0-maccatalyst/publish/fh-browser.pkg
